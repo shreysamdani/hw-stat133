@@ -390,6 +390,8 @@ library(corrplot)
 
 ``` r
 qdat <- select_if(na.omit(data1), is.numeric)
+qdat$symboling <- NULL
+qdat$normalized_losses <- NULL
 M <- cor(qdat)
 ```
 
@@ -406,3 +408,65 @@ corrplot(M, method = 'circle')
 ![](hw01-Shrey-Samdani_files/figure-markdown_github/corrplot2-1.png)
 
 Based on the correlograms, there are few main patterns that can be observed. The first is that there is a strong correlation between the size features of the auto (wheel\_base, length ... bore). The second is that the size and the mpg are highly uncorrelated. The city\_mpg and highway\_mpg are also strongly correlated with each other. The price and horsepower are also positively correlated with the size, showing that bigger cars seem to cost more. It also implies that more expensive cars have worse mpg but more horsepower. Everything else is insignificant and relatively uncorrelated.
+
+8. Principal Components Analysis
+--------------------------------
+
+### Run PCA
+
+``` r
+pca_prcomp <- prcomp(qdat, scale = TRUE)
+
+eigenvalues <- pca_prcomp$sdev^2
+percentage = 100* eigenvalues / sum(eigenvalues)
+cumulative = cumsum(percentage)
+
+proportion = data.frame(eigenvalues, percentage, cumulative)
+proportion
+```
+
+    ##    eigenvalues percentage cumulative
+    ## 1   7.78036168 55.5740120   55.57401
+    ## 2   2.04609771 14.6149837   70.18900
+    ## 3   1.31815775  9.4154125   79.60441
+    ## 4   0.88723082  6.3373630   85.94177
+    ## 5   0.56546244  4.0390174   89.98079
+    ## 6   0.39095199  2.7925142   92.77330
+    ## 7   0.27618337  1.9727384   94.74604
+    ## 8   0.22164907  1.5832077   96.32925
+    ## 9   0.14783726  1.0559805   97.38523
+    ## 10  0.12214670  0.8724764   98.25771
+    ## 11  0.08942773  0.6387695   98.89648
+    ## 12  0.08612020  0.6151443   99.51162
+    ## 13  0.04580215  0.3271582   99.83878
+    ## 14  0.02257113  0.1612224  100.00000
+
+Based on the table, 55.6% of the variation is captured by the first component, 70.1% by the first two, and 79.6% by the first 3.
+
+### PCA plot of vehicles, and PCA plot of variables
+
+``` r
+pc1 <- pca_prcomp$x[,'PC1']
+pc2 <- pca_prcomp$x[,'PC2']
+plot(pc1,pc2, xlab = "PC1", ylab = "PC2")
+```
+
+![](hw01-Shrey-Samdani_files/figure-markdown_github/unnamed-chunk-4-1.png)
+
+``` r
+PC1 <- pca_prcomp$rotation[1:14]
+PC2 <- pca_prcomp$rotation[15:28]
+plot(PC1,PC2, type = 'n')
+text(PC1,PC2, names(qdat), cex = 0.8, col = 'red')
+arrows(0,0,PC1,PC2, col = 'red')
+```
+
+![](hw01-Shrey-Samdani_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+``` r
+biplot(pca_prcomp)
+```
+
+![](hw01-Shrey-Samdani_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+The scatterplot between PC1 and PC2 shows no real correlation, implying that the variables are not completely correlated to each other and are almost independent if looked at as a whole. The second graph shows that most of the arrows are long, implying a high correlation coefficient. This means that the PCs are relatively accurate representation of the correlation between the variables.
