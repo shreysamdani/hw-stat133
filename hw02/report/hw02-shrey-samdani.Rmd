@@ -1,24 +1,118 @@
 ---
 title: "Hw02-shrey-samdani"
 output: github_document
+author: "Shrey Samdani"
 ---
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../images/')
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+# import packages
+library(dplyr)
+library(ggplot2)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+# create charts
+dat <- read.csv(file = '../data/shots-data.csv')
+
+total_points <- 
+dat %>%
+  select(name) %>%
+  group_by(name) %>%
+  summarize(
+    total = length(name)
+  ) %>%
+  arrange(desc(name))
+
+esp <- 
+  dat %>%
+  select(name, shot_made_flag) %>%
+  group_by(name) %>%
+  summarize(
+    total = length(name),
+    made = length(shot_made_flag[shot_made_flag =='made shot']),
+    perc_made = 100* made/total
+  ) %>%
+  arrange(desc(perc_made))
+
+twopt <- 
+  dat %>%
+  select(name, shot_made_flag, shot_type) %>%
+  group_by(name) %>%
+  summarize(
+    total = length(shot_type[shot_type == '2PT Field Goal']),
+    made = length(shot_made_flag[shot_made_flag =='made shot' & shot_type == '2PT Field Goal']),
+    perc_made = 100* made/total
+  ) %>%
+  arrange(desc(perc_made))
+
+threept <- 
+  dat %>%
+  select(name, shot_made_flag, shot_type) %>%
+  group_by(name) %>%
+  summarize(
+    total = length(shot_type[shot_type == '3PT Field Goal']),
+    made = length(shot_made_flag[shot_made_flag =='made shot' & shot_type == '3PT Field Goal']),
+    perc_made = 100* made/total
+  ) %>%
+  arrange(desc(perc_made))
+
+esp
+twopt
+threept
+```
+
+
+```{r shooting_distance}
+distances <- 
+  dat %>%
+  select(shot_distance, shot_made_flag) %>%
+  group_by(shot_distance) %>%
+  summarize(
+    made_shot_prop = length(shot_made_flag[shot_made_flag == 'made shot']) / n()
+  ) %>%
+  arrange(shot_distance)
+
+distances
+
+ggplot(data = distances) + 
+  geom_point(aes(x = shot_distance, y = made_shot_prop)) + 
+  ggtitle('Shot Distance vs Percentage')
+
+```
+
+* What do you observe?  
+As the distance increases, the shot percentage follows a downward trend.
+
+* Can you confirm that the shorter the distance, the more effective the shots?
+No; there are some data points that are higher in shot_distance but lower in made_shot_prop.
+
+* Can you guesstimate a distance threshold beyond which the chance of making a successful shot is basically null?  
+At/after around 34, most of the shots have a 0 proportion of success.
+
+* What distances tend to have a percentage (of making a shot) of 50% or more?  
+According to the graph, the distances 0,1,2,12,16,18,21,30,51 have a percentage of 50 or more.
+
+```{r Total shots by minute of occurence}
+data <- dat %>%
+  select(name ,minute, period) %>%
+  group_by(name,minute, period) %>%
+  summarize(
+    total_shots = n()
+  ) %>%
+  arrange(minute)
+
+ggplot(data = data, aes(x = minute, y = total_shots, xmin = (period %% 2)*24, xmax = (period %% 2)*24 + 12, ymin = 0, ymax = 60)) + 
+  scale_x_continuous(breaks = c(12,24,36,48)) + 
+  geom_rect(fill = 'gray95') +
+  geom_point(color = rgb(73,140,251,maxColorValue = 255)) +
+  geom_path(color = rgb(73,140,251,maxColorValue = 255)) +
+  theme_minimal() +
+  labs(y= 'total number of shots',title ="Total number of shots (by minute of occurrence)") +
+  facet_wrap(~ name)
+  
+```
+
