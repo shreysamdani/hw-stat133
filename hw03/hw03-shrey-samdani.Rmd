@@ -1,28 +1,101 @@
 ---
 title: "Hw03-shrey-samdani"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = T, error = T, fig.path = 'images/')
 ```
 
-## R Markdown
+## Piping
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+#### 2.1
+```{bash}
+cut -d "," -f 2 nba2017-roster.csv | tail +2 | sort -u > team-names.txt
+head -5 team-names.txt
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+#### 2.2
+```{bash}
+cut -d "," -f 3 nba2017-roster.csv | tail +2 | sort -u > position-names.txt 
+head -5 position-names.txt
+```
+#### 2.3
+```{bash}
+cut -d "," -f 7 nba2017-roster.csv | tail +2 | sort | uniq -c > experience-counts.txt
+head -5 experience-counts.txt
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#### 2.4
+```{bash}
+grep -e 'team' nba2017-roster.csv > LAC.csv
+grep -e 'LAC' nba2017-roster.csv | sort >> LAC.csv
+cat LAC.csv
+```
+
+#### 2.5
+```{bash}
+ grep -e 'LAL' nba2017-roster.csv | cut -d "," -f 6 | sort |  uniq -c
+```
+
+#### 2.6
+```{bash}
+grep -e 'CLE' nba2017-roster.csv | wc -l
+```
+
+#### 2.7
+```{bash}
+grep -e 'team' nba2017-roster.csv | cut -d "," -f 1,4,5 > gsw-height-weight.csv
+grep -e 'GSW' nba2017-roster.csv | cut -d "," -f 1,4,5   >> gsw-height-weight.csv
+cat gsw-height-weight.csv
+```
+
+#### 2.8
+```{bash}
+cut -d "," -f 1,8 nba2017-roster.csv | sort -t "," -k2 -r -n | head -10 > top10-salaries.csv
+cat top10-salaries.csv
+```
+
+## Binomial Probability Functions
+```{r}
+source("code/binomial-functions.R")
+```
+
+
+* Assume that the “successful” event is getting a “six” when rolling a die. Consider
+rolling a fair die 10 times. Use bin_probability() to find the probability of getting
+exactly 3 sixes.
+```{r}
+bin_probability(10,3,1/6)
+```
+
+
+*  Use bin_distribution() to obtain the distribution of the number of “sixes” when
+rolling a loaded die 10 times, in which the number “six” has probability of 0.25. Make
+a plot of this distribution.
+```{r}
+distribution = bin_distribution(10,0.25)
+plot(distribution)
+```
+
+
+* Use bin_probability(), and a for loop, to obtain the probability of getting more
+than 3 heads in 5 tosses with a biased coin of 35% chance of heads.
+```{r}
+probability <- 0
+for (i in 4:5) {
+  probability = probability + bin_probability(5,i,0.35)
+}
+probability
+
+```
+
+
+* Use bin_distribution() to obtain the probability distribution of the number of heads
+when tossing a loaded coin 15 times, with 35% chance of heads. Make a plot of this
+distribution.
+```{r}
+distribution = bin_distribution(15,0.35)
+plot(distribution)
+
+```
