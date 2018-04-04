@@ -1,8 +1,8 @@
 Hw04-shrey-samdani
 ================
 
-1) Archive of an R Package
---------------------------
+Archive of an R Package
+-----------------------
 
 ``` r
 source("../code/archive-functions.R")
@@ -13,7 +13,7 @@ write.csv(clean_data, file = "../data/stringr-archive.csv" )
 plot_archive(clean_data)
 ```
 
-![](images/unnamed-chunk-1-1.png)
+![](../images/unnamed-chunk-1-1.png)
 
 ``` r
 facetedData = data.frame()
@@ -33,7 +33,7 @@ ggplot(data = facetedData, aes(x = date, y = size, color = type)) +
   labs(y = 'Size (KB)')
 ```
 
-![](images/unnamed-chunk-2-1.png)
+![](../images/unnamed-chunk-2-1.png)
 
 ``` r
 ggplot(data = facetedData, aes(x = date, y = size, color = type)) +
@@ -42,7 +42,7 @@ ggplot(data = facetedData, aes(x = date, y = size, color = type)) +
   facet_wrap(~ type, scales = 'free')
 ```
 
-![](images/unnamed-chunk-2-2.png)
+![](../images/unnamed-chunk-2-2.png)
 
 Regex Functions
 ---------------
@@ -107,8 +107,8 @@ reverse_words("string")
 
     ## [1] "string"
 
-3) Data “Emotion in Text”
--------------------------
+Data “Emotion in Text”
+----------------------
 
 ``` r
 content = read.csv("../data/text-emotion.csv", stringsAsFactors = F)$content
@@ -128,7 +128,7 @@ print(summary(counts))
 hist(counts, breaks = seq(0, max(counts)+5, by=5))
 ```
 
-![](images/unnamed-chunk-9-1.png)
+![](../images/unnamed-chunk-9-1.png)
 
 ### 3.2) Number of Mentions
 
@@ -143,7 +143,7 @@ menCounts = table(mentions)
 barplot(menCounts)
 ```
 
-![](images/unnamed-chunk-10-1.png)
+![](../images/unnamed-chunk-10-1.png)
 
 ``` r
 menCounts
@@ -209,7 +209,7 @@ hashCounts
 barplot(hashCounts)
 ```
 
-![](images/unnamed-chunk-11-1.png)
+![](../images/unnamed-chunk-11-1.png)
 
 ``` r
 #avg length of hashtags

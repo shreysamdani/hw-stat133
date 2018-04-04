@@ -4,11 +4,11 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = T, error = T, fig.path = 'images/')
+knitr::opts_chunk$set(echo = T, error = T, fig.path = '../images/')
 ```
 
 
-## 1) Archive of an R Package
+## Archive of an R Package
 ```{r}
 source("../code/archive-functions.R")
 
@@ -64,7 +64,7 @@ reverse_words("sentence! this reverse")
 reverse_words("string")
 ```
 
-## 3) Data “Emotion in Text”
+## Data “Emotion in Text”
 ```{r}
 content = read.csv("../data/text-emotion.csv", stringsAsFactors = F)$content
 ```
