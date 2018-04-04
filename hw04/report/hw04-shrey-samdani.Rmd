@@ -1,0 +1,140 @@
+---
+title: "Hw04-shrey-samdani"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, error = T, fig.path = 'images/')
+```
+
+
+## 1) Archive of an R Package
+```{r}
+source("../code/archive-functions.R")
+
+raw_data <- read_archive('stringr')
+clean_data <- clean_archive(raw_data)
+write.csv(clean_data, file = "../data/stringr-archive.csv" )
+plot_archive(clean_data)
+
+facetedData = data.frame()
+packages = c("ggplot2", "XML", "knitr", "dplyr")
+for (package in packages) {
+  raw_data <- read_archive(package)
+  clean_data <- clean_archive(raw_data)
+  write.csv(clean_data, file = paste0("../data/",package,"-archive.csv" ))
+  clean_data$type = package
+  facetedData <- rbind(facetedData, clean_data)
+}
+```
+
+```{r}
+ggplot(data = facetedData, aes(x = date, y = size, color = type)) +
+  geom_step() + 
+  labs(y = 'Size (KB)')
+
+ggplot(data = facetedData, aes(x = date, y = size, color = type)) +
+  geom_step() + 
+  labs(y = 'Size (KB)') + 
+  facet_wrap(~ type, scales = 'free')
+```
+
+
+## Regex Functions
+```{r}
+source("../code/regex-functions.R")
+
+split_chars('Go Bears!')
+split_chars('Expecto Patronum')
+```
+```{r}
+vec <- c('G', 'o', ' ', 'B', 'e', 'a', 'r', 's', '!')
+num_vowels(vec)
+```
+```{r}
+count_vowels("The quick brown fox jumps over the lazy dog")
+count_vowels("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG")
+```
+```{r}
+reverse_chars("gattaca")
+reverse_chars("Lumox Maxima")
+```
+```{r}
+reverse_words("sentence! this reverse")
+reverse_words("string")
+```
+
+## 3) Data “Emotion in Text”
+```{r}
+content = read.csv("../data/text-emotion.csv", stringsAsFactors = F)$content
+```
+
+### 3.1) Number of characters per tweet
+```{r}
+counts = nchar(content)
+print(summary(counts))
+hist(counts, breaks = seq(0, max(counts)+5, by=5))
+```
+
+### 3.2) Number of Mentions
+```{r}
+mentions = 1:length(content)
+for (i in mentions) {
+  mentions[i] = sum(grepl("^@[A-Za-z0-9_]{1,15}", str_split(content[i], " ")[[1]]))
+}
+mentions = unlist(mentions)
+menCounts = table(mentions)
+
+barplot(menCounts)
+menCounts
+content[mentions == 10]
+```
+
+### 3.3) Hashtags
+```{r}
+# total hashtags in each tweet
+hashtags = 1:length(content)
+
+# lengths of hashtags in each tweet
+hashtagLengths = rep(0,max(counts))
+
+for (i in hashtags) {
+  
+  # split up the tweet into words
+  tweetWords = str_split(content[i], " ")[[1]]
+  
+  # mark which words are hashtags
+  whichTags = grepl("^#[A-Za-z][A-Za-z0-9]*", tweetWords)
+  
+  # count how many hashtags there are
+  hashtags[i] = sum(whichTags)
+  
+  # create a table of frequncies for hashtag lengths
+  for (j in 1:length(whichTags)) {
+    if (whichTags[j]) {
+      index <- nchar(tweetWords[j])
+      hashtagLengths[index] = hashtagLengths[index] + 1
+    }
+  }
+}
+
+names(hashtagLengths) <- 1:length(hashtagLengths)
+hashtagLengths <- hashtagLengths[hashtagLengths > 0]
+
+# open up the hashtags list
+hashtags = unlist(hashtags)
+
+# get the frequencies of the number of hashtags in a tweet
+hashCounts = table(hashtags)
+
+#frequencies of counts
+hashCounts
+barplot(hashCounts)
+
+#avg length of hashtags
+sum(hashtagLengths*as.numeric(names(hashtagLengths))/sum(hashtagLengths))
+
+#mode of the length
+names(hashtagLengths[hashtagLengths == max(hashtagLengths)])
+
+```
