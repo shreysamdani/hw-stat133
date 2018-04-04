@@ -5,7 +5,7 @@
 * practice with some basic/intermediate manipulations of strings and regular expressions
 
 ## Files:
-* hw04/
+* hw04
         * README.md
     * #report files (contain all the problems and the respective answers)
         * hw04-shrey-samdani.Rmd
