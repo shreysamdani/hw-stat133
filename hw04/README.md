@@ -6,7 +6,7 @@
 
 ## Files:
 * hw04
-        * README.md
+    * README.md
     * #report files (contain all the problems and the respective answers)
         * hw04-shrey-samdani.Rmd
         * hw04-shrey-samdanimd
