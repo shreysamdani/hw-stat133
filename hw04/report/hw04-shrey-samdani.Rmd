@@ -80,9 +80,9 @@ hist(counts, breaks = seq(0, max(counts)+5, by=5))
 ```{r}
 mentions = 1:length(content)
 for (i in mentions) {
-  mentions[i] = sum(grepl("^@[A-Za-z0-9_]{1,15}", str_split(content[i], " ")[[1]]))
+  mentions[i] = length(grep("@[A-Za-z0-9_]{1,15}$", str_split(content[i], " ")[[1]]))
 }
-mentions = unlist(mentions)
+
 menCounts = table(mentions)
 
 barplot(menCounts)
@@ -103,26 +103,20 @@ for (i in hashtags) {
   # split up the tweet into words
   tweetWords = str_split(content[i], " ")[[1]]
   
-  # mark which words are hashtags
-  whichTags = grepl("^#[A-Za-z][A-Za-z0-9]*", tweetWords)
+  # find the hashtags
+  whichTags = grep("#[A-Za-z][A-Za-z0-9]*$", tweetWords, value = T)
+  
+  # find the lengths of the hashtags
+  lengthIndices = nchar(whichTags) - 1
+  
+  # add to the table length
+  hashtagLengths[lengthIndices] = hashtagLengths[lengthIndices] + 1
   
   # count how many hashtags there are
-  hashtags[i] = sum(whichTags)
-  
-  # create a table of frequncies for hashtag lengths
-  for (j in 1:length(whichTags)) {
-    if (whichTags[j]) {
-      index <- nchar(tweetWords[j])
-      hashtagLengths[index] = hashtagLengths[index] + 1
-    }
-  }
+  hashtags[i] = length(whichTags)
 }
 
-names(hashtagLengths) <- 1:length(hashtagLengths)
-hashtagLengths <- hashtagLengths[hashtagLengths > 0]
-
-# open up the hashtags list
-hashtags = unlist(hashtags)
+names(hashtagLengths) <- 1:(length(hashtagLengths))
 
 # get the frequencies of the number of hashtags in a tweet
 hashCounts = table(hashtags)

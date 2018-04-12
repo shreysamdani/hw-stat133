@@ -135,9 +135,9 @@ hist(counts, breaks = seq(0, max(counts)+5, by=5))
 ``` r
 mentions = 1:length(content)
 for (i in mentions) {
-  mentions[i] = sum(grepl("^@[A-Za-z0-9_]{1,15}", str_split(content[i], " ")[[1]]))
+  mentions[i] = length(grep("@[A-Za-z0-9_]{1,15}$", str_split(content[i], " ")[[1]]))
 }
-mentions = unlist(mentions)
+
 menCounts = table(mentions)
 
 barplot(menCounts)
@@ -151,7 +151,7 @@ menCounts
 
     ## mentions
     ##     0     1     2     3     4     5     6     7     8     9    10 
-    ## 21085 18138   635    83    35    14     5     1     2     1     1
+    ## 21373 17935   569    75    27    14     2     1     2     1     1
 
 ``` r
 content[mentions == 10]
@@ -173,26 +173,20 @@ for (i in hashtags) {
   # split up the tweet into words
   tweetWords = str_split(content[i], " ")[[1]]
   
-  # mark which words are hashtags
-  whichTags = grepl("^#[A-Za-z][A-Za-z0-9]*", tweetWords)
+  # find the hashtags
+  whichTags = grep("#[A-Za-z][A-Za-z0-9]*$", tweetWords, value = T)
+  
+  # find the lengths of the hashtags
+  lengthIndices = nchar(whichTags) - 1
+  
+  # add to the table length
+  hashtagLengths[lengthIndices] = hashtagLengths[lengthIndices] + 1
   
   # count how many hashtags there are
-  hashtags[i] = sum(whichTags)
-  
-  # create a table of frequncies for hashtag lengths
-  for (j in 1:length(whichTags)) {
-    if (whichTags[j]) {
-      index <- nchar(tweetWords[j])
-      hashtagLengths[index] = hashtagLengths[index] + 1
-    }
-  }
+  hashtags[i] = length(whichTags)
 }
 
-names(hashtagLengths) <- 1:length(hashtagLengths)
-hashtagLengths <- hashtagLengths[hashtagLengths > 0]
-
-# open up the hashtags list
-hashtags = unlist(hashtags)
+names(hashtagLengths) <- 1:(length(hashtagLengths))
 
 # get the frequencies of the number of hashtags in a tweet
 hashCounts = table(hashtags)
@@ -202,8 +196,8 @@ hashCounts
 ```
 
     ## hashtags
-    ##     0     1     2     3     5     7     8     9 
-    ## 39265   647    65    17     1     1     1     3
+    ##     0     1     2     3     5     7 
+    ## 39329   602    55    12     1     1
 
 ``` r
 barplot(hashCounts)
@@ -216,11 +210,11 @@ barplot(hashCounts)
 sum(hashtagLengths*as.numeric(names(hashtagLengths))/sum(hashtagLengths))
 ```
 
-    ## [1] 8.997714
+    ## [1] 7.628223
 
 ``` r
 #mode of the length
 names(hashtagLengths[hashtagLengths == max(hashtagLengths)])
 ```
 
-    ## [1] "5"
+    ## [1] "4"
