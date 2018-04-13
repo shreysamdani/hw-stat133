@@ -78,14 +78,13 @@ hist(counts, breaks = seq(0, max(counts)+5, by=5))
 
 ### 3.2) Number of Mentions
 ```{r}
-
 mentions = unlist(lapply(content, 
                          function(x) length(grep("^[^@@]*@[A-Za-z0-9_]{1,15}$",
                                                  str_split(x, " ")[[1]]))))
 menCounts = table(mentions)
 barplot(menCounts)
 menCounts
-content[mentions == 5]
+content[mentions == 10]
 ```
 
 ### 3.3) Hashtags

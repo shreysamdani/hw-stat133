@@ -151,22 +151,10 @@ menCounts
     ## 21375 17933   569    75    28    13     2     1     2     1     1
 
 ``` r
-content[mentions == 5]
+content[mentions == 10]
 ```
 
-    ##  [1] "@FrankieTheSats @MollieOfficial @Rochellewiseman @Unahealy @vanessawhite Post man Pat has now been &amp; still no birthday cards from yous?!"
-    ##  [2] "YM, meebo &amp; ebuddy really hate us  @kuhrabbyPATTY @whatsuppp @ashpolicarpio @cheyennelaxa @piaatrinidad"                                 
-    ##  [3] "ok @shaaqt @spitphyre @limeice @unitechy @punkpolkadots Love you girls. but work beckons.  Will come back later for #twpp"                   
-    ##  [4] "I wish I was going to see @patmaine @johnmaine @garrettmaine @jaredmaine @kennedymaine today!! I'm sad I dont"                               
-    ##  [5] "#followfriday @nickw84 @kevkevv @vjartist @liverpool10 follow these ppl ... they are interesting .. @vjartist doesnt tweet much though"      
-    ##  [6] "and these awesome tweeples too!  @xoNessCullenxo @xoJasperHalexo @xoEmmettC35xo @oxTanyaDenaliox @xoEsmeCullenxo"                            
-    ##  [7] "@dmeeker @alanstevens  @scrum_coach @sethrowe @scottreynolds IMHO this soft is the best to keep the chaos straight   http://bit.ly/yuFil"    
-    ##  [8] "Although it is becoming Tuesday (soon) in New Zealand  * @bigbdisco @by_starla @tubilino @LittleC @asterion H... ? http://blip.fm/~5jhim"    
-    ##  [9] "http://twitpic.com/4iw0x @JerryKontur @rvitek @carolwingert @Weidling @joereist Thx all - it's a 3k capacity, bought second hand"            
-    ## [10] "@Nabaishko @BADDASSTWIN @DJPLAYBOY @GREENARROW09 @Kellynico  get lit  I am  http://bit.ly/OASQR"                                             
-    ## [11] "@_Bella_Cullen13 @RosalieHCullen @Esme_Cullen26 @alicecullen01 @NeSsIe_Cullen10  These are my family girls  love u guys *smiles*"            
-    ## [12] "Thanks to: @soultravelers3 @marcphotoshow @WorldTravelBlog @cthechange @annaphoto New followers!"                                            
-    ## [13] "@jaredmaine @kennedymaine @johnmaine @patmaine @garrettmaine I LOVE YOU GUYS! get your ass to australia in december for my birthday"
+    ## [1] "last #ff  @Mel_Diesel @vja4041 @DemonFactory @shawnmcguirt @SEO_Web_Design @ChuckSwanson @agracing @confidentgolf @tluckow @legalblonde31"
 
 ### 3.3) Hashtags
 
