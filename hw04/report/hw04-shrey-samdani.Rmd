@@ -78,16 +78,14 @@ hist(counts, breaks = seq(0, max(counts)+5, by=5))
 
 ### 3.2) Number of Mentions
 ```{r}
-mentions = 1:length(content)
-for (i in mentions) {
-  mentions[i] = length(grep("@[A-Za-z0-9_]{1,15}$", str_split(content[i], " ")[[1]]))
-}
 
+mentions = unlist(lapply(content, 
+                         function(x) length(grep("^[^@@]*@[A-Za-z0-9_]{1,15}$",
+                                                 str_split(x, " ")[[1]]))))
 menCounts = table(mentions)
-
 barplot(menCounts)
 menCounts
-content[mentions == 10]
+content[mentions == 5]
 ```
 
 ### 3.3) Hashtags
@@ -104,7 +102,7 @@ for (i in hashtags) {
   tweetWords = str_split(content[i], " ")[[1]]
   
   # find the hashtags
-  whichTags = grep("#[A-Za-z][A-Za-z0-9]*$", tweetWords, value = T)
+  whichTags = grep("#[A-Za-z][A-Za-z0-9]*", tweetWords, value = T)
   
   # find the lengths of the hashtags
   lengthIndices = nchar(whichTags) - 1
@@ -132,3 +130,5 @@ sum(hashtagLengths*as.numeric(names(hashtagLengths))/sum(hashtagLengths))
 names(hashtagLengths[hashtagLengths == max(hashtagLengths)])
 
 ```
+
+
