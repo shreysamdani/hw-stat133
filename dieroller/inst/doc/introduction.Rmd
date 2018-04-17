@@ -1,0 +1,65 @@
+---
+title: "Getting started with dieroller"
+author: "Shrey Samdani"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to dieroller}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = T)
+library(dieroller)
+```
+
+
+
+## Rolling a die
+The package `"dieroller"` is an implementation for simulating rolling a die a given number of times, and to visualize the relative frequencies
+in such a series of rolls.
+
+
+## Creating a `die`
+
+First, create a fair die as follows
+```{r}
+fair_die <- die()
+fair_die
+```
+
+The probablities and outcome space can also be changed 
+```{r}
+# die with non-standard sides
+weird_die <- die(sides = c('i', 'ii', 'iii', 'iv', 'v', 'vi'))
+weird_die
+
+# create a loaded die
+loaded_die <- die(prob = c(0.075, 0.1, 0.125, 0.15, 0.20, 0.35))
+loaded_die
+```
+
+
+## Rolling a coin
+Once you have defined a `"die"` object, you can use the function `roll()` to
+_roll_ a coin a given number of `times`. The output will be an object of class 
+`"roll"`, which will contain the vector of `rolls`:
+```{r}
+# roll 50 times
+fair_50 <- roll(fair_die, times = 50)
+fair_50
+```
+
+`summary()` can be used to observe the frequencies:
+```{r}
+summary(fair_50)
+```
+
+## Plot of relative frequencies
+
+You can use the function `plot()` to create a graohic with the relative 
+frequencies of a series of die rolls:
+```{r, fig.show='hold'}
+plot(fair_50)
+```
