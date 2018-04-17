@@ -1,0 +1,142 @@
+---
+title: "hw05"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = T)
+library(dieroller)
+```
+
+
+
+## 1) Object "die"
+```{r}
+
+
+# default call: creates a standard fair die
+fair_die <- die()
+fair_die
+
+
+# die with non-standard sides
+weird_die <- die(sides = c('i', 'ii', 'iii', 'iv', 'v', 'vi'))
+weird_die
+
+
+# create a loaded die
+loaded_die <- die(prob = c(0.075, 0.1, 0.125, 0.15, 0.20, 0.35))
+loaded_die
+
+
+# bad sides
+bad_die <- die(sides = c('a', 'b', 'c', 'd', 'e'))
+
+
+# bad prob
+bad_die <- die(
+sides = c('a', 'b', 'c', 'd', 'e', 'f'),
+prob = c(0.2, 0.1, 0.1, 0.1, 0.5, 0.1))
+```
+
+
+
+## 2) Object "roll"
+```{r}
+
+# roll fair die 50 times
+fair_die <- die()
+
+# roll 50 times
+set.seed(123)
+fair_50 <- roll(fair_die, times = 50)
+
+# print
+fair_50
+
+# what's in fair50?
+names(fair_50)
+
+fair_50$rolls
+fair_50$sides
+fair_50$prob
+fair_50$total
+
+```
+
+## 3) Summary method for "roll" objects
+```{r}
+set.seed(123)
+fair_50rolls <- roll(fair_die, times = 50)
+fair50_sum <- summary(fair_50rolls)
+fair50_sum
+
+# what's in the summary
+class(fair50_sum)
+names(fair50_sum)
+fair50_sum$freqs
+```
+
+## 4) PLot method for "roll" objects
+```{r}
+# plot method
+plot(fair_50rolls)
+
+```
+
+## 5) Additional Methods
+```{r}
+
+# roll fair die
+set.seed(123)
+fair_die <- die()
+fair500 <- roll(fair_die, times = 500)
+
+# summary method
+summary(fair500)
+
+# extracting roll in position 500
+fair500[500]
+summary(fair500)
+
+# replacing last roll
+fair500[500] <- 1
+fair500[500]
+summary(fair500)
+
+# adding 100 rolls
+fair600 = fair500 + 100
+summary(fair600)
+
+# plot method
+plot(fair500, 500)
+```
+
+## De Mere’s problem
+```{r}
+# Problem 1
+
+fairDie = die()
+sixes = 0
+for (i in 1:1000) {
+  trial = roll(fairDie, 4)
+  if (is.element(6, trial$rolls)) {
+    sixes = sixes + 1
+  } 
+}
+sixes/1000
+
+
+# Problem 2
+sixes = 0
+for (i in 1:1000) {
+  for (j in 1:24) {
+    trial = roll(fairDie, 2)
+    if (sum(trial$rolls == 6) == 2) {
+      sixes = sixes + 1
+      break
+    }
+  }
+}
+sixes / 1000
+```
