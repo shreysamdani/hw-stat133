@@ -5,7 +5,7 @@
 * put in practice some of the programming concepts that are covered in the course (loops and functions)
 
 ## Files:
-* hw03/
+* hw03
     * README.md
     * #report files (contain all the problems and the respective answers)
         * hw03-first-last.Rmd
